@@ -41,7 +41,7 @@ namespace PatikaDevParamHafta1Odev.Models
                 new Product()
                 {
                     Id = 4,
-                    Name = "Doamtes Salçası",
+                    Name = "Domates Salçası",
                     CategoryName = "Food",
                     Description = "80g tomato paste",
                     Quantity = 100

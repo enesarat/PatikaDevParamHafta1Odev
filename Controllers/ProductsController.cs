@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PatikaDevParamHafta1Odev.Models;
 
 namespace PatikaDevParamHafta1Odev.Controllers
@@ -15,34 +17,84 @@ namespace PatikaDevParamHafta1Odev.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return null;
+            if (_dbContext.Products != null)
+            {
+                return Ok(_dbContext.Products.ToList()); // 200 + data
+            }
+            return NotFound(); // 404
         }
 
         [HttpGet]
         [Route("{id}")]
         public IActionResult GetById(int id)
         {
-            return null;
+            if (_dbContext.Products.Find(id) != null)
+            {
+                return Ok(_dbContext.Products.Find(id)); // 200 + data
+            }
+            return NotFound(); // 404
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] string value)
+        public IActionResult Create([FromBody] Product product)
         {
-            return null;
+            if (ModelState.IsValid)
+            {
+                var newProduct = _dbContext.Add(product);
+                return CreatedAtAction("Get", new { id = product.Id }, newProduct); // 201 + data + header info for data location
+            }
+            return BadRequest(ModelState); // 400
         }
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update(int id, [FromBody] string value)
+        public IActionResult Update(int id, [FromBody] Product product)
         {
-            return null;
+            if (_dbContext.Products.Find(id)!= null)
+            {
+                return Ok(_dbContext.Products.Update(product)); // 200 + data
+            }
+            return NotFound(); // 404 
         }
 
         [HttpDelete]
         [Route("{id}")]
         public IActionResult Delete(int id)
         {
-            return null;
+            if (_dbContext.Products.Find(id) != null)
+            {
+                var product =_dbContext.Products.Find(id);
+                _dbContext.Products.Remove(product);
+                return Ok(); // 200
+            }
+            return BadRequest(); // 400
+        }
+
+        [HttpPatch]
+        [Route("{id}")]
+        public IActionResult Patch(int id, [FromBody] JsonPatchDocument<Product> patchDocument)
+        {
+            if (patchDocument == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var product = _dbContext.Products.Find(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            patchDocument.ApplyTo(product,ModelState);
+           
+            if (ModelState.IsValid)
+            {
+                _dbContext.Products.Update(product);
+                _dbContext.SaveChanges();
+                return Ok(product);
+            }
+
+            return BadRequest(ModelState);
         }
     }
 }

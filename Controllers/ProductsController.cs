@@ -5,7 +5,7 @@ using PatikaDevParamHafta1Odev.Models;
 
 namespace PatikaDevParamHafta1Odev.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
@@ -17,84 +17,138 @@ namespace PatikaDevParamHafta1Odev.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            if (_dbContext.Products != null)
+            try
             {
-                return Ok(_dbContext.Products.ToList()); // 200 + data
+                var products = _dbContext.Products;
+                if (products != null)
+                {
+                    return Ok(_dbContext.Products.ToList()); // 200 + data
+                }
+                return NotFound(); // 404
             }
-            return NotFound(); // 404
+            catch (Exception exp)
+            {
+                return BadRequest(exp.Message);
+            }
         }
 
         [HttpGet]
         [Route("{id}")]
         public IActionResult GetById(int id)
         {
-            if (_dbContext.Products.Find(id) != null)
+
+            try
             {
-                return Ok(_dbContext.Products.Find(id)); // 200 + data
+                var product = _dbContext.Products.FirstOrDefault(p => p.Id == id);
+                if (product != null)
+                {
+                    return Ok(_dbContext.Products.Find(id)); // 200 + data
+                }
+                return NotFound(); // 404
             }
-            return NotFound(); // 404
+            catch (Exception exp)
+            {
+                return BadRequest(exp.Message);
+            }
         }
 
         [HttpPost]
         public IActionResult Create([FromBody] Product product)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var newProduct = _dbContext.Add(product);
-                return CreatedAtAction("Get", new { id = product.Id }, newProduct); // 201 + data + header info for data location
+                if (ModelState.IsValid)
+                {
+                    _dbContext.Add(product);
+                    _dbContext.SaveChanges();
+                    return CreatedAtAction(nameof(GetById), new { id = product.Id }, product); // 201 + data + header info for data location
+                }
+                return BadRequest(ModelState); // 400
             }
-            return BadRequest(ModelState); // 400
+            catch (Exception exp)
+            {
+                return BadRequest(exp.Message);
+            }
+
         }
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update(int id, [FromBody] Product product)
+        public IActionResult Update([FromRoute] int id, [FromBody] Product product)
         {
-            if (_dbContext.Products.Find(id)!= null)
+            try
             {
-                return Ok(_dbContext.Products.Update(product)); // 200 + data
+                var productU = _dbContext.Products.AsNoTracking().FirstOrDefault(p => p.Id == id);
+                if (productU != null)
+                {
+                    product.Id= productU.Id;
+                    _dbContext.Products.Update(product);
+                    _dbContext.SaveChanges();
+                    return Ok(product); // 200 + data
+                }
+                return NotFound(); // 404 
             }
-            return NotFound(); // 404 
+            catch (Exception exp)
+            {
+                return BadRequest(exp.Message);
+            }
+
         }
 
         [HttpDelete]
         [Route("{id}")]
         public IActionResult Delete(int id)
         {
-            if (_dbContext.Products.Find(id) != null)
+            try
             {
-                var product =_dbContext.Products.Find(id);
-                _dbContext.Products.Remove(product);
-                return Ok(); // 200
+                var product = _dbContext.Products.FirstOrDefault(p => p.Id == id);
+                if (product != null)
+                {
+                    _dbContext.Products.Remove(product);
+                    _dbContext.SaveChanges();
+                    return Ok(); // 200
+                }
+                return BadRequest(); // 400
             }
-            return BadRequest(); // 400
+            catch (Exception exp)
+            {
+                return BadRequest(exp.Message);
+            }
+
         }
 
         [HttpPatch]
         [Route("{id}")]
         public IActionResult Patch(int id, [FromBody] JsonPatchDocument<Product> patchDocument)
         {
-            if (patchDocument == null)
+            try
             {
+                if (patchDocument == null)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var product = _dbContext.Products.FirstOrDefault(p => p.Id == id);
+                if (product == null)
+                {
+                    return NotFound();
+                }
+
+                patchDocument.ApplyTo(product, ModelState);
+
+                if (ModelState.IsValid)
+                {
+                    _dbContext.Products.Update(product);
+                    _dbContext.SaveChanges();
+                    return Ok(product);
+                }
+
                 return BadRequest(ModelState);
             }
-
-            var product = _dbContext.Products.Find(id);
-            if (product == null)
+            catch (Exception exp)
             {
-                return NotFound();
+                return BadRequest(exp.Message);
             }
-
-            patchDocument.ApplyTo(product,ModelState);
-           
-            if (ModelState.IsValid)
-            {
-                _dbContext.Products.Update(product);
-                _dbContext.SaveChanges();
-                return Ok(product);
-            }
-
-            return BadRequest(ModelState);
         }
     }
 }

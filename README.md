@@ -1,6 +1,6 @@
 # Restful Api Development Task
 
- -      It must comply with the rest standards.
+ -    It must comply with the rest standards.
  -    GET, POST, PUT, DELETE, PATCH methods should be used.
  -    Http status code standards must be followed. Giving 500, 400, 404, 200, 201 errors in standard format with Error Handler
  -    Mandatory fields should be checked in models.

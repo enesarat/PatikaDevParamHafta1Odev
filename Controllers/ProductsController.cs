@@ -10,6 +10,8 @@ namespace PatikaDevParamHafta1Odev.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly AppDbContext _dbContext;
+
+        // This endpoint provides to get all data of product entity as a list.
         public ProductsController(AppDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -31,8 +33,9 @@ namespace PatikaDevParamHafta1Odev.Controllers
                 return BadRequest(exp.Message);
             }
         }
-        
+
         //-------------------------------------------------------------------- GET FROM BODY ----------------------------------------------------//
+        // This endpoint provides to get the data of product which exist with given id information. (with binding over body)
         [HttpGet]
         [Route("{id}")]
         public IActionResult GetById(int id)
@@ -52,8 +55,9 @@ namespace PatikaDevParamHafta1Odev.Controllers
                 return BadRequest(exp.Message);
             }
         }
-        
+
         //-------------------------------------------------------------------- GET FROM QUERY ----------------------------------------------------//
+        // This endpoint provides to get the data of product which exist according to given id information. (with binding over query string)
         [HttpGet]
         [Route("GetByIdFromQuery")]
         public IActionResult Get([FromQuery] int id)
@@ -73,8 +77,9 @@ namespace PatikaDevParamHafta1Odev.Controllers
                 return BadRequest(exp.Message);
             }
         }
-        
+
         //-------------------------------------------------------------------- FILTER FROM BODY ----------------------------------------------------//
+        // This endpoint provides to get the data of product which exist according to given properties as filtered list. (with binding over body)
         [HttpGet]
         [Route("{name}/{saleStatus}")]
         public IActionResult Get(string name, string categoryName, int price, int quantity, bool saleStatus)
@@ -109,8 +114,9 @@ namespace PatikaDevParamHafta1Odev.Controllers
                 return BadRequest(exp.Message);
             }
         }
-        
+
         //-------------------------------------------------------------------- FILTER FROM QUERY ----------------------------------------------------//
+        // This endpoint provides to get the data of product which exist according to given properties as filtered list. (with binding over query string)
         [HttpGet]
         [Route("GetByFilterFromQuery")]
         public IActionResult GetByFilter([FromQuery] string name, [FromQuery] string categoryName, [FromQuery] int price, [FromQuery] int quantity, [FromQuery] bool saleStatus)
@@ -145,8 +151,9 @@ namespace PatikaDevParamHafta1Odev.Controllers
                 return BadRequest(exp.Message);
             }
         }
-        
+
         //-------------------------------------------------------------------- CREATE FROM BODY ----------------------------------------------------//
+        // This endpoint provides to create a record of product according to given properties. (with binding over body)
         [HttpPost]
         public IActionResult Create([FromBody] Product product)
         {
@@ -168,6 +175,7 @@ namespace PatikaDevParamHafta1Odev.Controllers
         }
 
         //-------------------------------------------------------------------- CREATE FROM QUERY ----------------------------------------------------//
+        // This endpoint provides to create a record of product according to given properties. (with binding over query string)
         [HttpPost]
         [Route("CreateFromQuery")]
 
@@ -191,6 +199,7 @@ namespace PatikaDevParamHafta1Odev.Controllers
         }
 
         //-------------------------------------------------------------------- UPDATE FROM BODY ----------------------------------------------------//
+        // This endpoint provides to update the record of product according to given id which exist with given product data. (with binding over body)
         [HttpPut]
         [Route("{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] Product product)
@@ -215,6 +224,7 @@ namespace PatikaDevParamHafta1Odev.Controllers
         }
 
         //-------------------------------------------------------------------- UPDATE FROM QUERY ----------------------------------------------------//
+        // This endpoint provides to update the record of product according to given id which exist with given product data. (with binding over query string)
         [HttpPut]
         [Route("UpdateFromQuery")]
         public IActionResult UpdateFromQuery([FromQuery] Product product)
@@ -237,8 +247,9 @@ namespace PatikaDevParamHafta1Odev.Controllers
             }
 
         }
-        
+
         //-------------------------------------------------------------------- DELETE FROM BODY ----------------------------------------------------//
+        // This endpoint provides to delete the record of product according to given id which exist with given product data. (with binding over body)
         [HttpDelete]
         [Route("{id}")]
         public IActionResult Delete(int id)
@@ -262,6 +273,7 @@ namespace PatikaDevParamHafta1Odev.Controllers
         }
 
         //-------------------------------------------------------------------- DELETE FROM QUERY ----------------------------------------------------//
+        // This endpoint provides to delete the record of product according to given id which exist with given product data. (with binding over query string)
         [HttpDelete]
         [Route("DeleteFromQuery")]
         public IActionResult DeleteFromQuery([FromQuery] int id)
@@ -285,6 +297,7 @@ namespace PatikaDevParamHafta1Odev.Controllers
         }
 
         //-------------------------------------------------------------------- PATCH FROM BODY ----------------------------------------------------//
+        // This endpoint provides to patch(to local update in this endpoint) the record of product according to given id which exist with given product data. (with binding over body)
         [HttpPatch]
         [Route("{id}")]
         public IActionResult Patch(int id, [FromBody] JsonPatchDocument<Product> patchDocument)
@@ -320,6 +333,7 @@ namespace PatikaDevParamHafta1Odev.Controllers
         }
 
         //-------------------------------------------------------------------- PATCH FROM QUERY ----------------------------------------------------//
+        // This endpoint provides to patch(to local update in this endpoint) the record of product according to given id which exist with given product data. (with binding over query string)
         [HttpPatch]
         [Route("PatchFromQuery")]
         public IActionResult PatchFromQuery([FromQuery] int id, [FromQuery] JsonPatchDocument<Product> patchDocument)

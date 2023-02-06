@@ -20,7 +20,9 @@ namespace PatikaDevParamHafta1Odev.Models
                     Name="Çikolatalı Gofret",
                     CategoryName="Food",
                     Description= "40g chocolate covered wafers",
-                    Quantity=100
+                    Quantity=100,
+                    Price=5,
+                    SaleStatus = false
                 },
                 new Product()
                 {
@@ -28,7 +30,9 @@ namespace PatikaDevParamHafta1Odev.Models
                     Name = "Ice Tea",
                     CategoryName = "Food",
                     Description = "500ml peach flavored ice tea",
-                    Quantity = 50
+                    Quantity = 50,
+                    Price = 12,
+                    SaleStatus = true
                 },
                 new Product()
                 {
@@ -36,7 +40,9 @@ namespace PatikaDevParamHafta1Odev.Models
                     Name = "Makarna",
                     CategoryName = "Food",
                     Description = "150g spaghetti",
-                    Quantity = 100
+                    Quantity = 100,
+                    Price = 8,
+                    SaleStatus = true
                 },
                 new Product()
                 {
@@ -44,7 +50,9 @@ namespace PatikaDevParamHafta1Odev.Models
                     Name = "Domates Salçası",
                     CategoryName = "Food",
                     Description = "80g tomato paste",
-                    Quantity = 100
+                    Quantity = 100,
+                    Price = 20,
+                    SaleStatus = false
                 }
                 );
         }

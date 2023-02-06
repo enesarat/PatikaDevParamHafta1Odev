@@ -1,4 +1,4 @@
-# Restful Api Developement Task
+# Restful Api Development Task
 
  -      It must comply with the rest standards.
  -    GET, POST, PUT, DELETE, PATCH methods should be used.
